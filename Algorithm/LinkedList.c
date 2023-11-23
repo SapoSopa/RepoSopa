@@ -1,4 +1,5 @@
-//#include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 //Componentes de uma lista;
 //O tipo int pode ser alterado para qualquer outro tipo;
 
