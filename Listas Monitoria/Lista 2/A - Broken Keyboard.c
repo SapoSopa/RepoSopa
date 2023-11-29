@@ -19,6 +19,7 @@ List *createList ();
 void insert (List *list, char data);
 void moveToStart (List *list);
 void moveToEnd (List *list);
+void clear (List *list);
 
 int main()
 {
@@ -26,25 +27,32 @@ int main()
     char c;
     while (scanf("%c", &c) != EOF)
     {
-        if (c == '[')
+        while (c != '\n')
         {
-            moveToStart(Text);
+            if (c == '[')
+            {
+                moveToStart(Text);
+            }
+            else if (c == ']')
+            {
+                moveToEnd(Text);
+            }
+            else
+            {
+                insert(Text, c);
+            }
+            scanf("%c", &c);
         }
-        else if (c == ']')
+        moveToStart(Text);
+        int i = 0;
+        for (i = 0; i < Text->size; i++)
         {
-            moveToEnd(Text);
+            Text->curr = Text->curr->next;
+            printf("%c", Text->curr->data);
         }
-        else
-        {
-            insert(Text, c);
-        }
-    }
-
-    moveToStart(Text);
-    for (int i = 0; i < Text->size; i++)
-    {
-        Text->curr = Text->curr->next;
-        printf("%c", Text->curr->data);
+        printf("\n");
+        clear(Text);
+        Text = createList();
     }
 
     return 0;
@@ -93,4 +101,15 @@ void moveToStart (List *list)
 void moveToEnd (List *list)
 {
     list->curr = list->tail;
+}
+
+void clear (List *list)
+{
+    while (list->head != NULL)
+    {
+        list->curr = list->head;
+        list->head = list->head->next;
+        free(list->curr);
+    }
+    free(list);
 }

@@ -63,7 +63,6 @@ List *createList ()
 
 void clear (List *list)
 {
-    list->curr = list->head;
     while (list->head != NULL)
     {
         list->curr = list->head;
