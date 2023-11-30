@@ -18,14 +18,14 @@ typedef struct Queue{
 //Funções de manipulação de filas;
 //O value tipo int pode ser alterado para qualquer outro tipo;
 
-Node *createNode (int value, Node *next);
-Node *createNodeHeader (Node *next);
-Queue *createQueue ();
-void clear (Queue *queue);
-void enqueue (Queue *queue, int value);
-int dequeue (Queue *queue);
-int front (Queue *queue);
-int size (Queue *queue);
+Node *createNode (int value, Node *next);       //Cria um nó com um valor e um ponteiro para o próximo nó;
+Node *createNodeHeader (Node *next);            //Cria um nó com um ponteiro para o próximo nó, normalmente é a head;
+Queue *createQueue ();                          //Cria uma fila;
+void clear (Queue *queue);                      //Limpa a fila da memória;
+void enqueue (Queue *queue, int value);         //Insere um elemento no final da fila;
+int dequeue (Queue *queue);                     //Remove e retorna o elemento do início da fila;
+int front (Queue *queue);                       //Retorna o elemento do início da fila;
+int size (Queue *queue);                        //Retorna o tamanho da fila;
 
 //Funções de manipulação de filas;
 

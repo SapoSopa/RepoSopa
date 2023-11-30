@@ -18,21 +18,21 @@ typedef struct List{
 //Funções de manipulação de listas;
 //O value tipo int pode ser alterado para qualquer outro tipo;
 
-Node *createNode (int value, Node *next);
-Node *createNodeHeader (Node *next);
-List *createList ();
-void clear (List *list);
-void insert (List *list, int value);
-void append (List *list, int value);
-int remove (List *list);
-void moveToStart (List *list);
-void moveToEnd (List *list);
-void prev (List *list);
-void next (List *list);
-int length (List *list);
-int currPos (List *list);
-void moveToPos (List *list, int pos);
-int getValue (List *list);
+Node *createNode (int value, Node *next);           //Cria um nó com um valor e um ponteiro para o próximo nó;
+Node *createNodeHeader (Node *next);                //Cria um nó com um ponteiro para o próximo nó, normalmente é a head;
+List *createList ();                                //Cria uma lista;
+void clear (List *list);                            //Limpa a lista da memória;
+void insert (List *list, int value);                //Insere um elemento na posição atual da lista;
+void append (List *list, int value);                //Insere um elemento no final da lista;
+void moveToStart (List *list);                      //Move o cursor para o início da lista, a head;
+void moveToEnd (List *list);                        //Move o cursor para o final da lista, a tail;
+void prev (List *list);                             //Move o cursor para a posição anterior da lista;
+void next (List *list);                             //Move o cursor para a posição seguinte da lista;
+void moveToPos (List *list, int pos);               //Move o cursor para uma posição específica da lista;
+int remove (List *list);                            //Remove e retorna o elemento da posição atual da lista;
+int length (List *list);                            //Retorna o tamanho da lista;
+int currPos (List *list);                           //Retorna a posição atual da lista;
+int getValue (List *list);                          //Retorna o elemento da posição atual da lista;
 
 //Funções de manipulação de listas;
 
@@ -90,24 +90,6 @@ void append (List *list, int value)
     list->size++;
 }
 
-int remove (List *list)
-{
-    if (list->curr->next == NULL)
-    {
-        //Algum comentário indicando erro;
-        return -1;
-    }
-    Node *temp = list->curr->next;
-    list->curr->next = temp->next;
-    if (temp == list->tail)
-    {
-        list->tail = list->curr;
-    }
-    free(temp);
-    list->size--;
-    return list->curr->next->value;
-}
-
 void moveToStart (List *list)
 {
     list->curr = list->head;
@@ -140,6 +122,40 @@ void next (List *list)
     }
 }
 
+void moveToPos (List *list, int pos)
+{
+    if (pos >= 0 && pos <= list->size)
+    {
+        list->curr = list->head;
+        for (int i = 0; i < pos; i++)
+        {
+            list->curr = list->curr->next;
+        }
+    }
+    else
+    {
+        //Algum comentário indicando erro;
+    }
+}
+
+int remove (List *list)
+{
+    if (list->curr->next == NULL)
+    {
+        //Algum comentário indicando erro;
+        return -1;
+    }
+    Node *temp = list->curr->next;
+    list->curr->next = temp->next;
+    if (temp == list->tail)
+    {
+        list->tail = list->curr;
+    }
+    free(temp);
+    list->size--;
+    return list->curr->next->value;
+}
+
 int length (List *list)
 {
     return list->size;
@@ -156,22 +172,6 @@ int currPos (List *list)                        //Caso haja um node->prev, ele p
     }
     free(temp);
     return i;
-}
-
-void moveToPos (List *list, int pos)
-{
-    if (pos >= 0 && pos <= list->size)
-    {
-        list->curr = list->head;
-        for (int i = 0; i < pos; i++)
-        {
-            list->curr = list->curr->next;
-        }
-    }
-    else
-    {
-        //Algum comentário indicando erro;
-    }
 }
 
 int getValue (List *list)

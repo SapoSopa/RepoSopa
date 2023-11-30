@@ -16,13 +16,13 @@ typedef struct Stack{
 //Funções de manipulação de pilhas;
 //O value tipo int pode ser alterado para qualquer outro tipo;
 
-Node *createNode (int value, Node *next);
-Stack *createStack ();
-void clear (Stack *stack);
-void push (Stack *stack, int value);
-int pop (Stack *stack);
-int top (Stack *stack);
-int size (Stack *stack);
+Node *createNode (int value, Node *next);           //Cria um nó com um valor e um ponteiro para o próximo nó;
+Stack *createStack ();                              //Cria uma pilha;
+void clear (Stack *stack);                          //Limpa a pilha da memória;
+void push (Stack *stack, int value);                //Insere um elemento no topo da pilha;
+int pop (Stack *stack);                             //Remove e retorna o elemento do topo da pilha;
+int top (Stack *stack);                             //Retorna o elemento do topo da pilha;
+int size (Stack *stack);                            //Retorna o tamanho da pilha;
 
 //Funções de manipulação de pilhas;
 
