@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //Componentes de uma lista;
-//O tipo int pode ser alterado para qualquer outro tipo;
+//O value tipo int pode ser alterado para qualquer outro tipo;
 
 typedef struct Node{            //A estrutura do nó pode ser alterada para registrar também
     int value;                  //um ponteiro para o elemento anterior, o que facilitaria a
@@ -16,7 +16,7 @@ typedef struct List{
 } List;
 
 //Funções de manipulação de listas;
-//O tipo int pode ser alterado para qualquer outro tipo;
+//O value tipo int pode ser alterado para qualquer outro tipo;
 
 Node *createNode (int value, Node *next);
 Node *createNodeHeader (Node *next);
@@ -94,7 +94,8 @@ int remove (List *list)
 {
     if (list->curr->next == NULL)
     {
-        return 0;
+        //Algum comentário indicando erro;
+        return -1;
     }
     Node *temp = list->curr->next;
     list->curr->next = temp->next;
@@ -167,13 +168,18 @@ void moveToPos (List *list, int pos)
             list->curr = list->curr->next;
         }
     }
+    else
+    {
+        //Algum comentário indicando erro;
+    }
 }
 
 int getValue (List *list)
 {
     if (list->curr->next == NULL)
     {
-        return 0;
+        //Algum comentário indicando erro;
+        return -1;
     }
     return list->curr->next->value;
 }
