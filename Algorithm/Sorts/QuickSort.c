@@ -1,3 +1,11 @@
+#include <stdio.h>
+//Funções para o quick sort;
+
+int HoarePartition (int arr[], int l, int r);  //função que faz a partição
+void quicksort (int arr[], int l, int r);      //função que divide o array em subarrays
+
+//Funções;
+
 int HoarePartition (int arr[], int l, int r)
 {
     int p = arr[l];

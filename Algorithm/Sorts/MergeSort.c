@@ -1,3 +1,11 @@
+#include <stdio.h>
+//Funções para o merge sort;
+
+void merge(long long int arr[], int l, int r);          //função que faz o merge
+void mergesort(long long int arr[], int l, int r);      //função que divide o array em subarrays
+
+//Funções;
+
 void merge(long long int arr[], int l, int r)
 {
     int m = (l + r) / 2;
