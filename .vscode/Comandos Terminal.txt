@@ -1,0 +1,10 @@
+ls                  //Ler pasta atual
+dir                 //Ler pasta atual
+cd                  //Comando
+    ..              //Sair da pasta
+    -               //Retornar pra última pasta
+    /               //Retornar ao Diretório do Sistema
+    /"caminho"      //Ir para endereço específico dentro do endereço atual
+./.exe              //Executar .exe
+    < ./.txt        //Ler entrada
+    > ./.txt        //Escrever saída
