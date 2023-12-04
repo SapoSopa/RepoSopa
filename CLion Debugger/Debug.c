@@ -1,6 +1,2 @@
-#include <stdio.h>
+//Coloque seu código para debuggar aqui
 
-int main() {
-    printf("Hello, World!\n");
-    return 0;
-}
