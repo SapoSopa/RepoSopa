@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char binarySearch(char estudante[][30], char nome[30], int i, int j)
+char binarySearch(char estudante[][31], char nome[31], int i, int j)
 {
     if (j >= i)
     {
@@ -31,14 +31,14 @@ int main()
 {
     int e;
     scanf("%d", &e);
-    char estudante[e][30];
+    char estudante[e][31];
     for(int i = 0; i < e; i++)
     {
         scanf("%s", estudante[i]);
     }
     int q;
     scanf("%d", &q);
-    char nome[q][30];
+    char nome[q][31];
     for(int i = 0; i < q; i++)
     {
         scanf("%s", nome[i]);

@@ -26,30 +26,30 @@ int main ()
     {
         if (!(strcmp(L, "+")))
         {
-            v2 = pop(&p);
-            v1 = pop(&p);
-            push(&p, v1 + v2);
+            v2 = pop(p);
+            v1 = pop(p);
+            push(p, v1 + v2);
         }
         else if (!(strcmp(L, "-")))
         {
-            v2 = pop(&p);
-            v1 = pop(&p);
-            push(&p, v1 - v2);
+            v2 = pop(p);
+            v1 = pop(p);
+            push(p, v1 - v2);
         }
         else if (!(strcmp(L, "*")))
         {
-            v2 = pop(&p);
-            v1 = pop(&p);
-            push(&p, v1 * v2);
+            v2 = pop(p);
+            v1 = pop(p);
+            push(p, v1 * v2);
         }
         else if (!(strcmp(L, "END")))
         {
-            printf("%d\n", pop(&p));
+            printf("%d\n", pop(p));
         }
         else
         {
             l = atoi(L);
-            push(&p, l);
+            push(p, l);
         }
         scanf("%s", L);
     }
