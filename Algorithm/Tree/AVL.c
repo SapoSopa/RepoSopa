@@ -266,43 +266,79 @@ Node *getMax (Node *n)
 
 Node *deletemin (Node *n)
 {
-    Node *parent = NULL;
-    Node *temp = n;
-    while (temp->left != NULL)
+    if (n == NULL)
     {
-        parent = temp;
-        temp = temp->left;
+        return n;
     }
-    if (parent == NULL)
+    else if (n->left != NULL)
     {
-        n = n->right;
+        n->left = deletemin(n->left);
     }
     else
     {
-        parent->left = temp->right;
+        Node *temp = n->right;
+        free(n);
+        n = temp;
     }
-    free(temp);
+    n->height = max(h(n->left), h(n->right)) + 1;
+    int balance = getBalance(n);
+    if (balance < -1 && n->key >= n->right->key)
+    {
+        return leftRotate(n);
+    }
+    else if (balance < -1 && n->key < n->right->key)
+    {
+        n->right = rightRotate(n->right);
+        return leftRotate(n);
+    }
+    else if (balance > 1 && n->key < n->left->key)
+    {
+        return rightRotate(n);
+    }
+    else if (balance > 1 && n->key >= n->left->key)
+    {
+        n->left = leftRotate(n->left);
+        return rightRotate(n);
+    }
     return n;
 }
 
 Node *deletemax (Node *n)
 {
-    Node *parent = NULL;
-    Node *temp = n;
-    while (temp->right != NULL)
+    if (n == NULL)
     {
-        parent = temp;
-        temp = temp->right;
+        return n;
     }
-    if (parent == NULL)
+    else if (n->right != NULL)
     {
-        n = n->left;
+        n->right = deletemax(n->right);
     }
     else
     {
-        parent->right = temp->left;
+        Node *temp = n->left;
+        free(n);
+        n = temp;
     }
-    free(temp);
+    n->height = max(h(n->left), h(n->right)) + 1;
+    int balance = getBalance(n);
+    if (balance < -1 && n->key >= n->right->key)
+    {
+        return leftRotate(n);
+    }
+    else if (balance < -1 && n->key < n->right->key)
+    {
+        n->right = rightRotate(n->right);
+        return leftRotate(n);
+    }
+    else if (balance > 1 && n->key < n->left->key)
+    {
+        return rightRotate(n);
+    }
+    else if (balance > 1 && n->key >= n->left->key)
+    {
+        n->left = leftRotate(n->left);
+        return rightRotate(n);
+    }
     return n;
 }
 
@@ -317,3 +353,66 @@ int remove (AVL *t, int key)
     return temp;
 }
 
+Node *removeHelper (Node *n, int key)
+{
+    if (n->key > key)
+    {
+        n->left = removeHelper(n->left, key);
+    }
+    else if (n->key < key)
+    {
+        n->right = removeHelper(n->right, key);
+    }
+    else
+    {
+        if (n->left == NULL && n->right == NULL)
+        {
+            free(n);
+        }
+        else if (n->left == NULL)
+        {
+            Node *temp = n->right;
+            free(n);
+            n = temp;
+        }
+        else if (n->right == NULL)
+        {
+            Node *temp = n->left;
+            free(n);
+            n = temp;
+        }
+        else
+        {
+            Node *temp = getMin(n->right);
+            n->key = temp->key;
+            n->value = temp->value;
+            n->right = deletemin(n->right);
+        }
+    }
+    n->height = max(h(n->left), h(n->right)) + 1;
+    int balance = getBalance(n);
+    if (balance < -1 && n->key >= n->right->key)
+    {
+        return leftRotate(n);
+    }
+    else if (balance < -1 && n->key < n->right->key)
+    {
+        n->right = rightRotate(n->right);
+        return leftRotate(n);
+    }
+    else if (balance > 1 && n->key < n->left->key)
+    {
+        return rightRotate(n);
+    }
+    else if (balance > 1 && n->key >= n->left->key)
+    {
+        n->left = leftRotate(n->left);
+        return rightRotate(n);
+    }
+    return n;
+}
+
+int size (AVL *t)
+{
+    return t->cnt;
+}
