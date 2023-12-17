@@ -8,3 +8,5 @@ cd                  //Comando
 ./.exe              //Executar .exe
     < ./.txt        //Ler entrada
     > ./.txt        //Escrever saída
+gcc                 //Executar o compilador
+    main.c -o nome  //Criar um executável 
