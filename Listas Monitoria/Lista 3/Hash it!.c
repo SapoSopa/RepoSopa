@@ -81,21 +81,22 @@ void add (hash *H, char *k)
     if (H->cnt < MAX)
     {
         int i = Hash(k);
+        int l = i;
         int j = 0;
         int added = 0;
-        while (H->table[i]->full == 1 && j <= 19 && added == 0)
+        while (H->table[l]->full == 1 && j <= 19 && added == 0)
         {
-            if (strcmp(H->table[i]->key, k) == 0)
+            if (strcmp(H->table[l]->key, k) == 0)
             {
                 added = 1;
             }
             j++;
-            i = ((i+j*j+23*j)%MAX);
+            l = ((i+j*j+23*j)%MAX);
         }
         if (added == 0)
         {
-            strcpy(H->table[i]->key, k);
-            H->table[i]->full = 1;
+            strcpy(H->table[l]->key, k);
+            H->table[l]->full = 1;
             H->cnt++;
         }
     }
@@ -104,30 +105,31 @@ void add (hash *H, char *k)
 void del (hash *H, char *k)
 {
     int i = Hash(k);
+    int l = i;
     int j = 0;
     int deleted = 0;
-    while (H->table[i]->full == 1 && j <= 19 && deleted == 0)
+    while (H->table[l]->full == 1 && j <= 19 && deleted == 0)
     {
-        if (strcmp(H->table[i]->key, k) == 0)
+        if (strcmp(H->table[l]->key, k) == 0)
         {
-            H->table[i]->full = 0;
+            H->table[l]->full = 0;
             H->cnt--;
             deleted = 1;
         }
         j++;
-        i = ((i+j*j+23*j)%MAX);
+        l = ((i+j*j+23*j)%MAX);
     }
 }
 
 void print (hash *H)
 {
     int i;
-    printf("%d", H->cnt);
+    printf("%d\n", H->cnt);
     for (i = 0; i < MAX && H->cnt > 0; i++)
     {
         if (H->table[i]->full == 1)
         {
-            printf("\n%d:%s", i, H->table[i]->key);
+            printf("%d:%s\n", i, H->table[i]->key);
             H->table[i]->full = 0;
             H->cnt--;
         }
