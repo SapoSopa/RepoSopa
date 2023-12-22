@@ -104,9 +104,12 @@ void add (hash *H, char *k)
             j++;
             i = ((Hash(k)+j*j+23*j)%101);
         }
-        strcpy(H->table[i]->key, k);
-        H->table[i]->full = 1;
-        H->cnt++;
+        if (H->table[i]->full == 0)
+        {
+            strcpy(H->table[i]->key, k);
+            H->table[i]->full = 1;
+            H->cnt++;
+        }
     }
 }
 
@@ -121,6 +124,7 @@ void del (hash *H, char *k)
         {
             if (strcmp(H->table[i]->key, k) == 0)
             {
+                strcpy(H->table[i]->key, "");
                 H->table[i]->full = 0;
                 H->cnt--;
                 deleted = 1;
@@ -141,6 +145,7 @@ void print (hash *H)
         if (H->table[i]->full == 1)
         {
             printf("%d:%s\n", i, H->table[i]->key);
+            strcpy(H->table[i]->key, "");
             H->table[i]->full = 0;
             H->cnt--;
         }
