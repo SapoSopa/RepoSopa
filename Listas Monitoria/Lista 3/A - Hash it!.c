@@ -7,147 +7,120 @@ typedef struct node {
     int full;
 } node;
 
-typedef struct hash {
-    int cnt;
-    node *table[101];
-} hash;
-
-hash *createHash ();
 int h (char *k);
 int Hash (char *k);
-int find (hash *H, char *k);
-void add (hash *H, char *k);
-void del (hash *H, char *k);
-void print (hash *H);
+int find (node *H, char *k);
+void add (node *H, char *k, int *cnt);
+void del (node *H, char *k, int *cnt);
 
 int main ()
 {
     int t;
     int n;
     char key[16], op[4];
-    hash *H = createHash();
-    scanf("%d", &t);
+    node H[101];
+    scanf ("%d", &t);
     while (t--)
     {
-        scanf("%d", &n);
+        int cnt = 0;
+        for (int i = 0; i < 101; i++)
+        {
+            H[i].full = 0;
+        }
+        scanf ("%d", &n);
         while (n--)
         {
-            scanf(" %4[^:]:%s", op, key);
-            if (strcmp(op, "ADD") == 0)
+            scanf (" %4[^:]:%s", op, key);
+            if (strcmp (op, "ADD") == 0)
             {
-                add(H, key);
+                add (H, key, &cnt);
             }
-            else if(strcmp(op, "DEL") == 0)
+            else if (strcmp (op, "DEL") == 0)
             {
-                del(H, key);
+                del (H, key, &cnt);
             }
         }
-        print(H);
+        printf ("%d\n", cnt);
+        for (int i = 0; i < 101; i++)
+        {
+            if (H[i].full == 1)
+            {
+                printf ("%d:%s\n", i, H[i].key);
+            }
+        }
     }
 
     return 0;
 }
 
-hash *createHash ()
-{
-    hash *H = (hash *) malloc(sizeof(hash));
-    int i;
-    H->cnt = 0;
-    for (i = 0; i < 101; i++)
-    {
-        H->table[i] = (node *) malloc(sizeof(node));
-        H->table[i]->full = 0;
-    }
-    return H;
-}
-
 int h (char *k)
 {
-    int i;
     int sum = 0;
-    for (i = 0; i < strlen(k); i++)
+    for (int i = 0; k[i] != '\0'; i++)
     {
-        sum += (i+1)*k[i];
+        sum += k[i] * (i + 1);
     }
-    return 19*sum;
+    return sum * 19;
 }
 
 int Hash (char *k)
 {
-    return ((h(k))%101);
+    return h (k) % 101;
 }
 
-int find (hash *H, char *k)
+int find (node *H, char *k)
 {
-    int i = Hash(k);
+    int i = Hash (k);
     int j = 0;
-    while (j <= 19)
+    int found = 0;
+    while (found == 0 && j < 20)
     {
-        if (strcmp(H->table[i]->key, k) == 0)
+        if (H[i].full == 1 && strcmp (H[i].key, k) == 0)
         {
-            return 0;
+            found = 1;
         }
-        j++;
-        i = ((Hash(k)+j*j+23*j)%101);
-    }
-    return 1;
-}
-
-void add (hash *H, char *k)
-{   
-    if (H->cnt <= 101 && find(H, k))
-    {
-        int i = Hash(k);
-        int j = 0;
-        while (H->table[i]->full == 1 && j <= 19)
+        else
         {
             j++;
-            i = ((Hash(k)+j*j+23*j)%101);
+            i = (((Hash (k))+j*(j+23)) % 101);
         }
-        if (H->table[i]->full == 0)
-        {
-            strcpy(H->table[i]->key, k);
-            H->table[i]->full = 1;
-            H->cnt++;
-        }
+    }
+    if (found == 1)
+    {
+        return i;
+    }
+    else
+    {
+        return -1;
     }
 }
 
-void del (hash *H, char *k)
+void add (node *H, char *k, int *cnt)
 {
-    if (H->cnt > 0)
+    if (*cnt < 102 && find (H, k) == -1)
     {
-        int i = Hash(k);
+        int i = Hash (k);
         int j = 0;
-        int deleted = 0;
-        while (j <= 19 && deleted == 0)
+        while (H[i].full == 1 && j < 19)
         {
-            if (strcmp(H->table[i]->key, k) == 0)
-            {
-                strcpy(H->table[i]->key, "");
-                H->table[i]->full = 0;
-                H->cnt--;
-                deleted = 1;
-            }
             j++;
-            i = ((Hash(k)+j*j+23*j)%101);
+            i = (((Hash (k))+j*(j+23)) % 101);
         }
-    
+        if (H[i].full == 0)
+        {
+            strcpy (H[i].key, k);
+            H[i].full = 1;
+            (*cnt)++;
+        }
     }
 }
 
-void print (hash *H)
+void del (node *H, char *k, int *cnt)
 {
-    int i;
-    printf("%d\n", H->cnt);
-    for (i = 0; i < 101 && H->cnt > 0; i++)
+    int i = find (H, k);
+    if (i != -1)
     {
-        if (H->table[i]->full == 1)
-        {
-            printf("%d:%s\n", i, H->table[i]->key);
-            strcpy(H->table[i]->key, "");
-            H->table[i]->full = 0;
-            H->cnt--;
-        }
+        H[i].full = 0;
+        (*cnt)--;
     }
 }
