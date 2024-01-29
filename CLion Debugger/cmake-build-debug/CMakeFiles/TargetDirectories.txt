@@ -1,3 +1,0 @@
-C:/Users/Coden/OneDrive - UFPE/Git/CLion Debugger/cmake-build-debug/CMakeFiles/CLion_Debugger.dir
-C:/Users/Coden/OneDrive - UFPE/Git/CLion Debugger/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Coden/OneDrive - UFPE/Git/CLion Debugger/cmake-build-debug/CMakeFiles/rebuild_cache.dir
