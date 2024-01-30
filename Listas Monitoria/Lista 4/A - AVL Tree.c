@@ -55,7 +55,7 @@ Node *createNode (int key)
 {
     Node *n = (Node *) malloc(sizeof(Node));
     n->key = key;
-    n->height = 1;
+    n->height = -1;
     n->order = 1;
     n->left = NULL;
     n->right = NULL;
