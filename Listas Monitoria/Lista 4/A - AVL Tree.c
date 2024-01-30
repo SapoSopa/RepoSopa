@@ -1,233 +1,215 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int key;
+    int rank;
     int height;
-    int order;
     struct Node *left;
     struct Node *right;
 } Node;
 
-typedef struct AVL
-{
+typedef struct AVL {
     Node *root;
+    int size;
 } AVL;
 
-Node *createNode (int key);
-AVL *createAVL ();
-int findHelper (Node *n, int key);
-int find (AVL *t, int key);
-int max (int a, int b);
-int h (Node *n);
-int getBalance (Node *n);
-Node *rightRotate (Node *y);
-Node *leftRotate (Node *x);
-Node *fixorder (Node *n);
-Node *insertHelper (Node *n, int key);
-void insert (AVL *t, int key);
+Node *createNode(int key);
+AVL *createAVL();
+int max(int a, int b);
+int height(Node *node);
+int balance(Node *node);
+Node *rightRotate(Node *n);
+Node *leftRotate(Node *n);
+Node *find(Node *node, int key);
+Node *insertHelp(Node *node, int key);
+void insert(AVL *avl, int key);
+void attqueue(AVL *avl, int *queue, int *i);
+int pos(int key, int *queue);
 
 int main ()
 {
-    int n, x, key;
-    scanf("%d", &n);
+    int Q, n, key;
+    int added = 3;
     AVL *t = createAVL();
-    while (n--)
+    scanf("%d", &Q);
+    int queue[Q];
+    while (Q--) 
     {
-        scanf("%d", &x);
-        if (x == 1)
-        {
+        scanf("%d", &n);
+        if (n == 1) {
             scanf("%d", &key);
             insert(t, key);
-        }
-        else
+            added = 1;
+        } 
+        else 
         {
             scanf("%d", &key);
-            find(t, key) ? printf("%d\n", find(t, key)) : printf("Data tidak ada\n");
+            Node *f = find(t->root, key);
+            if (f == NULL)
+            {
+                printf("Data tidak ada\n");
+            }
+            else
+            {
+                if (added == 1)
+                {
+                    int i = t->size;
+                    attqueue(t, queue, &i);
+                }
+                int r = pos(key, queue);
+                printf("%d\n", r);
+                added = 2;
+            }
         }
     }
 
     return 0;
 }
 
-Node *createNode (int key)
+Node *createNode(int key)
 {
-    Node *n = (Node *) malloc(sizeof(Node));
-    n->key = key;
-    n->height = -1;
-    n->order = 1;
-    n->left = NULL;
-    n->right = NULL;
-    return n;
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->key = key;
+    node->height = 1;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
 }
 
-AVL *createAVL ()
+AVL *createAVL()
 {
-    AVL *t = (AVL *) malloc(sizeof(AVL));
-    t->root = NULL;
-    return t;
+    AVL *avl = (AVL *) malloc(sizeof(AVL));
+    avl->root = NULL;
+    avl->size = 0;
+    return avl;
 }
 
-int findHelper (Node *n, int key)
+int max(int a, int b)
 {
-    if (n == NULL)
+    return (a > b) ? a : b;
+}
+
+int height(Node *node)
+{
+    if (node == NULL)
     {
         return 0;
     }
-    else if (n->key == key)
-    {
-        return n->order;
-    }
-    else if (n->key > key)
-    {
-        return findHelper(n->left, key);
-    }
-    else
-    {
-        return findHelper(n->right, key);
-    }
+    return node->height;
 }
 
-int find (AVL *t, int key)
+int balance(Node *node)
 {
-    return findHelper(t->root, key);
-}
-
-int max (int a, int b)
-{
-    if (a < b)
-    {
-        return b;
-    }
-    else
-    {
-        return a;
-    }
-}
-
-int h (Node *n)
-{
-    if (n == NULL)
-    {
-        return -1;
-    }
-    else
-    {
-        return n->height;
-    }
-}
-
-int getBalance (Node *n)
-{
-    if (n == NULL)
+    if (node == NULL)
     {
         return 0;
     }
-    else
-    {
-        return h(n->left) - h(n->right);
-    }
+    return height(node->left) - height(node->right);
 }
 
-Node *rightRotate (Node *y)
+Node *rightRotate(Node *n)
 {
-    Node *x = y->left;
-    Node *T2 = x->right;
+    Node *l = n->left;
+    Node *lr = l->right;
+    
+    l->right = n;
+    n->left = lr;
 
-    x->right = y;
-    y->left = T2;
+    n->height = 1 + max(height(n->left), height(n->right));
+    l->height = 1 + max(height(l->left), height(l->right));
 
-    y->height = max(h(y->left), h(y->right)) + 1;
-    x->height = max(h(x->left), h(x->right)) + 1;
-
-    return x;
+    return l;
 }
 
-Node *leftRotate (Node *x)
+Node *leftRotate(Node *n)
 {
-    Node *y = x->right;
-    Node *T2 = y->left;
+    Node *r = n->right;
+    Node *rl = r->left;
 
-    y->left = x;
-    x->right = T2;
+    r->left = n;
+    n->right = rl;
 
-    x->height = max(h(x->left), h(x->right)) + 1;
-    y->height = max(h(y->left), h(y->right)) + 1;
+    n->height = 1 + max(height(n->left), height(n->right));
+    r->height = 1 + max(height(r->left), height(r->right));
 
-    return y;
+    return r;
 }
 
-Node *fixorder (Node *n)
+Node *find(Node *n, int key)
 {
     if (n == NULL)
     {
         return NULL;
     }
+    else if (key > n->key)
+    {
+        return find(n->right, key);
+    }
+    else if (key < n->key)
+    {
+        return find(n->left, key);
+    }
     else
     {
-        n->order++;
-        n->right = fixorder(n->right);
-        n->left = fixorder(n->left);
         return n;
     }
 }
 
-Node *insertHelper (Node *n, int key)
+Node *insertHelp(Node *node, int key)
 {
-    if (n == NULL)
+    if (node == NULL)
     {
         return createNode(key);
     }
-    else if (key < n->key)
+    if (key < node->key)
     {
-        n->order++;
-        n->right = fixorder(n->right);
-        n->left = insertHelper(n->left, key);
-        if (n->left->left == NULL && n->left->right == NULL)
-        {
-            n->left->order = n->order - 1;
-        }
+        node->left = insertHelp(node->left, key);
     }
-    else if (key > n->key)
+    else if (key >= node->key)
     {
-        n->right = insertHelper(n->right, key);
-        if (n->right->right == NULL && n->right->left == NULL)
-        {
-            n->right->order = n->order + 1;
-        }
+        node->right = insertHelp(node->right, key);
     }
 
-    n->height = 1 + max(h(n->left), h(n->right));
-
-    int balance = getBalance(n);
-
-    if (balance > 1 && key < n->left->key)
+    node->height = 1 + max(height(node->left), height(node->right));
+    int b = balance(node);
+    
+    if (b > 1 && key < node->left->key)
     {
-        return rightRotate(n);
+        return rightRotate(node);
     }
-    else if (balance < -1 && key > n->right->key)
+    if (b < -1 && key >= node->right->key)
     {
-        return leftRotate(n);
+        return leftRotate(node);
     }
-    else if (balance > 1 && key > n->left->key)
+    if (b > 1 && key >= node->left->key)
     {
-        n->left = leftRotate(n->left);
-        return rightRotate(n);
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
     }
-    else if (balance < -1 && key < n->right->key)
+    if (b < -1 && key < node->right->key)
     {
-        n->right = rightRotate(n->right);
-        return leftRotate(n);
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
     }
-
-    return n;
+    return node;
 }
 
-void insert (AVL *t, int key)
+void insert(AVL *avl, int key)
 {
-    if (find(t, key) == 0)
+    avl->root = insertHelp(avl->root, key);
+    avl->size++;
+}
+
+void attqueue(AVL *avl, int *queue, int *i)
+{
+    if (avl->root == NULL)
     {
-        t->root = insertHelper(t->root, key);
+        return;
     }
+    i--;
+    attqueue(avl->root->left, queue, i);
+    queue[*i] = avl->root->key;
+    i++;
+    attqueue(avl->root->right, queue, i);
 }

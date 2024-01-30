@@ -118,28 +118,23 @@ Node *insert (Node *n, int key)
     {
         n->left = insert(n->left, key);
     }
-    else if (key > n->key)
+    else if (key >= n->key)
     {
         n->right = insert(n->right, key);
     }
-    else
-    {
-        return n;
-    }
     
     n->height = 1 + max(h(n->left), h(n->right));
-    
     int balance = getBalance(n);
     
     if (balance > 1 && key < n->left->key)
     {
         return rightRotate(n);
     }
-    if (balance < -1 && key > n->right->key)
+    if (balance < -1 && key >= n->right->key)
     {
         return leftRotate(n);
     }
-    if (balance > 1 && key > n->left->key)
+    if (balance > 1 && key >= n->left->key)
     {
         n->left = leftRotate(n->left);
         return rightRotate(n);
