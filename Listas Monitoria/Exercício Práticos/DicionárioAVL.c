@@ -17,8 +17,6 @@ Node *rightRotate (Node *n);
 Node *leftRotate (Node *n);
 Node *insert (Node *n, int key);
 void preOrder (Node *n);
-void inOrder (Node *n);
-void postOrder (Node *n);
 void clear (Node *n);
 
 int main()
@@ -35,13 +33,9 @@ int main()
             root = insert(root, key);
         }
         preOrder(root);
-        printf("\n");
-        inOrder(root);
-        printf("\n");
-        postOrder(root);
-        printf("\n");
-        //clear(root);
-        //root = NULL;
+        printf("END\n");
+        clear(root);
+        root = NULL;
     }
 
     return 0;
@@ -163,29 +157,9 @@ void preOrder (Node *n)
 {
     if (n != NULL)
     {
-        printf("%d ", n->key);
+        printf("%d\n", n->key);
         preOrder(n->left);
         preOrder(n->right);
-    }
-}
-
-void inOrder (Node *n)
-{
-    if (n != NULL)
-    {
-        inOrder(n->left);
-        printf("%d ", n->key);
-        inOrder(n->right);
-    }
-}
-
-void postOrder (Node *n)
-{
-    if (n != NULL)
-    {
-        postOrder(n->left);
-        postOrder(n->right);
-        printf("%d ", n->key);
     }
 }
 
