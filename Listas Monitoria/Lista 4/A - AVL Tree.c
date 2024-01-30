@@ -3,213 +3,214 @@
 
 typedef struct Node {
     int key;
-    int rank;
     int height;
+    int cntL;
+    int cntR;
     struct Node *left;
     struct Node *right;
 } Node;
 
 typedef struct AVL {
+    int cntNode;
     Node *root;
-    int size;
 } AVL;
 
-Node *createNode(int key);
-AVL *createAVL();
-int max(int a, int b);
-int height(Node *node);
-int balance(Node *node);
-Node *rightRotate(Node *n);
-Node *leftRotate(Node *n);
-Node *find(Node *node, int key);
-Node *insertHelp(Node *node, int key);
-void insert(AVL *avl, int key);
-void attqueue(AVL *avl, int *queue, int *i);
-int pos(int key, int *queue);
-
-int main ()
+Node *CreateNode(int key)
 {
-    int Q, n, key;
-    int added = 3;
-    AVL *t = createAVL();
-    scanf("%d", &Q);
-    int queue[Q];
-    while (Q--) 
-    {
-        scanf("%d", &n);
-        if (n == 1) {
-            scanf("%d", &key);
-            insert(t, key);
-            added = 1;
-        } 
-        else 
-        {
-            scanf("%d", &key);
-            Node *f = find(t->root, key);
-            if (f == NULL)
-            {
-                printf("Data tidak ada\n");
-            }
-            else
-            {
-                if (added == 1)
-                {
-                    int i = t->size;
-                    attqueue(t, queue, &i);
-                }
-                int r = pos(key, queue);
-                printf("%d\n", r);
-                added = 2;
-            }
-        }
-    }
-
-    return 0;
+    Node *newNode = (Node*) malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->height = 0;
+    newNode->cntL = 0;
+    newNode->cntR = 0;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
-Node *createNode(int key)
+AVL *CreateAVL()
 {
-    Node *node = (Node *) malloc(sizeof(Node));
-    node->key = key;
-    node->height = 1;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
+    AVL *newAVL = (AVL *)malloc(sizeof(AVL));
+    newAVL->root = NULL;
+    newAVL->cntNode = 0;
+    return newAVL;
 }
 
-AVL *createAVL()
-{
-    AVL *avl = (AVL *) malloc(sizeof(AVL));
-    avl->root = NULL;
-    avl->size = 0;
-    return avl;
-}
-
-int max(int a, int b)
-{
-    return (a > b) ? a : b;
-}
-
-int height(Node *node)
+int Height(Node *node)
 {
     if (node == NULL)
     {
-        return 0;
+        return -1;
     }
     return node->height;
 }
 
-int balance(Node *node)
+int Max(int a, int b)
+{
+    return (a >= b) ? a : b;
+}
+
+int Balance(Node *node)
 {
     if (node == NULL)
     {
         return 0;
     }
-    return height(node->left) - height(node->right);
+    return Height(node->left) - Height(node->right);
 }
 
-Node *rightRotate(Node *n)
+Node *RotateLeft(Node *node)
 {
-    Node *l = n->left;
-    Node *lr = l->right;
-    
-    l->right = n;
-    n->left = lr;
-
-    n->height = 1 + max(height(n->left), height(n->right));
-    l->height = 1 + max(height(l->left), height(l->right));
-
-    return l;
-}
-
-Node *leftRotate(Node *n)
-{
-    Node *r = n->right;
+    Node *r = node->right;
     Node *rl = r->left;
+    r->left = node;
+    node->right = rl;
+    
+    if (rl != NULL)
+    {
+        node->cntR = rl->cntL + rl->cntR + 1;
+    } else {
+        node->cntR = 0;
+    }
 
-    r->left = n;
-    n->right = rl;
+    if (node != NULL)
+    {
+        r->cntL = node->cntL + node->cntR + 1;
+    } else {
+        r->cntL = 0;
+    }
 
-    n->height = 1 + max(height(n->left), height(n->right));
-    r->height = 1 + max(height(r->left), height(r->right));
-
+    node->height = 1 + Max(Height(node->left), Height(node->right));
+    r->height = 1 + Max(Height(r->left), Height(r->right));
     return r;
 }
 
-Node *find(Node *n, int key)
+Node *RotateRight(Node *node)
 {
-    if (n == NULL)
+    Node *l = node->left;
+    Node *lr = l->right;
+    l->right = node;
+    node->left = lr;
+
+    if (lr != NULL)
     {
-        return NULL;
+        node->cntL = lr->cntL + lr->cntR + 1;
+    } else {
+        node->cntL = 0;
     }
-    else if (key > n->key)
+
+    if (node != NULL)
     {
-        return find(n->right, key);
+        l->cntR = node->cntL + node->cntR + 1;
+    } else {
+        l->cntR = 0;
     }
-    else if (key < n->key)
-    {
-        return find(n->left, key);
-    }
-    else
-    {
-        return n;
-    }
+
+    node->height = 1 + Max(Height(node->left), Height(node->right));
+    l->height = 1 + Max(Height(l->left), Height(l->right));
+    return l;
 }
 
-Node *insertHelp(Node *node, int key)
+Node *InsertNode(Node *node, int key)
 {
     if (node == NULL)
     {
-        return createNode(key);
-    }
-    if (key < node->key)
-    {
-        node->left = insertHelp(node->left, key);
-    }
-    else if (key >= node->key)
-    {
-        node->right = insertHelp(node->right, key);
+        return node = CreateNode(key);
     }
 
-    node->height = 1 + max(height(node->left), height(node->right));
-    int b = balance(node);
-    
-    if (b > 1 && key < node->left->key)
+    if (key < node->key)
     {
-        return rightRotate(node);
+        node->left = InsertNode(node->left, key);
+        node->cntL++;
+    } else {
+        node->right = InsertNode(node->right, key);
+        node->cntR++;
     }
-    if (b < -1 && key >= node->right->key)
+
+    node->height = 1 + Max(Height(node->left), Height(node->right));
+    int balance = Balance(node);
+
+    if (balance > 1 && key < node->left->key)
     {
-        return leftRotate(node);
+        return RotateRight(node);
     }
-    if (b > 1 && key >= node->left->key)
+    else if (balance < -1 && key >= node->right->key)
     {
-        node->left = leftRotate(node->left);
-        return rightRotate(node);
+        return RotateLeft(node);
     }
-    if (b < -1 && key < node->right->key)
+    else if (balance > 1 && key >= node->left->key)
     {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
+        node->left = RotateLeft(node->left);
+        return RotateRight(node);
+    }
+    else if (balance < -1 && key < node->right->key)
+    {
+        node->right = RotateRight(node->right);
+        return RotateLeft(node);
     }
     return node;
 }
 
-void insert(AVL *avl, int key)
+void Insert(AVL *avl, int key)
 {
-    avl->root = insertHelp(avl->root, key);
-    avl->size++;
+    avl->root = InsertNode(avl->root, key);
+    avl->cntNode++;
 }
 
-void attqueue(AVL *avl, int *queue, int *i)
+int FindNode(Node *node, int key, int i)
 {
-    if (avl->root == NULL)
+    if (node == NULL)
     {
-        return;
+        return -1;
     }
-    i--;
-    attqueue(avl->root->left, queue, i);
-    queue[*i] = avl->root->key;
-    i++;
-    attqueue(avl->root->right, queue, i);
+
+    if (key < node->key)
+    {
+        return FindNode(node->left, key, i);
+    }
+    else if (key > node->key)
+    {
+        if (node->left != NULL)
+        {
+            i += node->left->cntL + node->left->cntR + 2;
+        } else {
+            i++;
+        }
+        return FindNode(node->right, key, i);
+    }
+    else
+    {
+        return i + node->cntL + 1;
+    }
+}
+
+int Find(AVL *avl, int key)
+{
+    return FindNode(avl->root, key, 0);
+}
+
+int main()
+{
+    AVL *avl = CreateAVL();
+    int Q, x, key, i;
+
+    scanf("%d", &Q);
+
+    while (Q--)
+    {
+        scanf("%d %d", &x, &key);
+        if (x == 1)
+        {
+            Insert(avl, key);
+        } else {
+            i = Find(avl, key);
+            if (i == -1)
+            {
+                printf("Data tidak ada\n");
+            } else {
+                printf("%d\n", i);
+            }
+        }
+    }    
+
+    return 0;
 }
