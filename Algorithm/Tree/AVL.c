@@ -57,7 +57,7 @@ Node *createNode (int key, int value)
     Node *n = (Node*)malloc(sizeof(Node));
     n->key = key;
     n->value = value;
-    n->height = 0;
+    n->height = 1;
     n->left = NULL;
     n->right = NULL;
     return n;
@@ -183,10 +183,13 @@ Node *rightRotate (Node *n)
 {
     Node *l = n->left;
     Node *lr = l->right;
+
     l->right = n;
     n->left = lr;
+
     n->height = max(h(n->left), h(n->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
+
     return l;
 }
 
@@ -194,10 +197,13 @@ Node *leftRotate (Node *n)
 {
     Node *r = n->right;
     Node *rl = r->left;
+
     r->left = n;
     n->right = rl;
+
     n->height = max(h(n->left), h(n->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
+
     return r;
 }
 
@@ -221,8 +227,10 @@ Node *insertHelper (Node *n, int key, int value)
     {
         n->right = insertHelper(n->right, key, value);
     }
+
     n->height = max(h(n->left), h(n->right)) + 1;
     int balance = getBalance(n);
+
     if (balance < -1 && key >= n->right->key)
     {
         return leftRotate(n);
