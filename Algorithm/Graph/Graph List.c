@@ -168,3 +168,12 @@ void setMark(Graph *G, int v, int val)
         G->List[v]->mark = val;
     }
 }
+
+int getMark(Graph *G, int v)
+{
+    if (v < G->V)
+    {
+        return G->List[v]->mark;
+    }
+    return /*Alguma mensagem de erro*/;
+}

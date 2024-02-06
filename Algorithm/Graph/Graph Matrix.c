@@ -35,6 +35,10 @@ Graph *create_graph(int V)
 {
     Graph *G = (Graph *)malloc(sizeof(Graph));
     G->Matrix = (int **)malloc(V * sizeof(int *));
+    for (int i = 0; i < V; i++)
+    {
+        G->Matrix[i] = (int *)malloc(V * sizeof(int));
+    }
     G->E = 0;
     G->Mark = (int *)malloc(V * sizeof(int));
     return G;
