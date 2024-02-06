@@ -12,15 +12,16 @@
 typedef struct Node
 {
     int v;                                      // Vértice;
-    int mark;                                   // Marcador auxiliar;
     struct Node *next;                          // Próximo vértice adjacente;
 } Node;
 
 typedef struct Graph
 {
     Node **List;                                // Lista de Adjacência;
+    //int *pred;                                // Vértice predecessor, caso necessário (requer modificações nas funções);
     int V;                                      // Número de Vértices;
     int E;                                      // Número de Arestas;
+    int *mark;                                  // Marcador auxiliar;
 } Graph;
 
 // Funções de manipulação de um grafo como uma Lista de Adjacência;
@@ -45,7 +46,6 @@ Node *create_node(int v)
 {
     Node *N = (Node *)malloc(sizeof(Node));
     N->v = v;
-    N->mark = 0;
     N->next = NULL;
     return N;
 }
@@ -54,6 +54,7 @@ Graph *create_graph(int V)
 {
     Graph *G = (Graph *)malloc(sizeof(Graph));
     G->List = (Node **)malloc(V * sizeof(Node *));
+    G->mark = (int *)malloc(V * sizeof(int));
     G->V = V;
     G->E = 0;
     return G;
@@ -165,7 +166,7 @@ void setMark(Graph *G, int v, int val)
 {
     if (v < G->V)
     {
-        G->List[v]->mark = val;
+        G->mark[v] = val;
     }
 }
 
@@ -173,7 +174,7 @@ int getMark(Graph *G, int v)
 {
     if (v < G->V)
     {
-        return G->List[v]->mark;
+        return G->mark[v];
     }
     return /*Alguma mensagem de erro*/;
 }
