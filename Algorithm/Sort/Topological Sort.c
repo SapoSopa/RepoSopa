@@ -7,7 +7,7 @@
 #include "../List/Array Stack.c" // As funções de "../List/Linked List Stack.c" também funciona nessa Busca;
 
 // Executar o graphTraverse para limpar os marcadores;
-void toposort(Graph *G, int v, Stack *s)
+void DFS_toposort(Graph *G, int v, Stack *s)
 {
     setMark(G, v, 1);                           // Marca o vértice como visitado;
     int w = first(G, v);                        // Pega o primeiro vértice adjacente;
@@ -15,9 +15,11 @@ void toposort(Graph *G, int v, Stack *s)
     {
         if (!getMark(G, w))
         {
-            toposort(G, w, s);                  // Chama a função recursivamente para visitar o vértice;
+            DFS_toposort(G, w, s);              // Chama a função recursivamente para visitar o vértice;
         }
         w = next(G, v, w);                      // Pega o próximo vértice adjacente;
     }
     push(s, v);                                 // Adiciona o vértice na pilha;
 }
+
+void BFStoposort(Graph *G, Stack *s)

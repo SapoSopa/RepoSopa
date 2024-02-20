@@ -105,11 +105,16 @@ void setEdge(Graph *G, int v1, int v2)
         int notInList = 1;
         while (notInList && N != NULL)
         {
-            if (Nv->v == N->next->v)
+            if (N->next == NULL)
+            {
+                N->next = Nv;
+                notInList = 0;
+            }
+            else if (Nv->v == N->next->v)
             {
                 notInList = 0;
             }
-            else if (Nv->v < N->next->v || N->next == NULL)
+            else if (Nv->v < N->next->v)
             {
                 Nv->next = N->next;
                 N->next = Nv;
