@@ -157,5 +157,6 @@ void insertHTD(Heap *heap, int value)
     {
         Node *aux = heap->root;
         while (aux->left != heap->lastP )
+        {}
     }
 }
