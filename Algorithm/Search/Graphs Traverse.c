@@ -20,8 +20,8 @@ void graphTraverse(Graph *G)                    // Algoritmo genérico de busca;
     }
 }
 
-// Algortimos de Busca;
-
+///////////////////////////////////////////////////////// Algortimos de Busca ///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Busca em Profundidade (Depth-First Search [DFS]);
 // Funciona como uma pilha, caso tente armazenar os vértices visitados;
 
@@ -40,7 +40,11 @@ void DFS(Graph *G, int v)
     }
     // Alguma coisa depois de visitar o vértice (posVisit(G, v));
 }
-// Exemplo de uso é em um Topological Sort (Ordenação Topológica - implementado em Algorithm/Sort/Topological Sort.c);
+
+//////////////////////////////////////////////////////////// Exemplo de uso //////////////////////////////////////////////////////////////
+//Topological Sort (Ordenação Topológica - implementado em Algorithm/Sort/Topological Sort.c);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Busca em Largura (Breadth-First Search [BFS]);
 // Funciona como uma fila, caso tente armazenar os vértices visitados;
@@ -68,7 +72,8 @@ void BFS(Graph *G, int v)
         // Alguma coisa depois de visitar o vértice (posVisit(G, v));
     }
 }
-// Exemplo de uso;
+
+////////////////////////////////////////////////////////////// Exemplo de uso //////////////////////////////////////////////////////////////
 //// Busca de Menor Caminho em Grafos Não-Ponderados;
 //// Acrescentar ao grafo um "int *pred" para armazenar o um dos predecessores do vértice;
 // Executar o graphTraverse para limpar os marcadores;
@@ -107,3 +112,4 @@ void MenorCaminho(Graph *G, int v, int *pred)   //Define-se o começo como vért
     }
     setRoute(pred, 0, G->V - 1);                // Usa o caminho, nesse caso, imprimindo no terminal;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
