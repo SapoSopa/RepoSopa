@@ -12,13 +12,14 @@
 typedef struct Node
 {
     int v;                                      // Vértice;
+    int weight;                                 // Peso da aresta, caso necessário;
     struct Node *next;                          // Próximo vértice adjacente;
 } Node;
 
 typedef struct Graph
 {
     Node **List;                                // Lista de Adjacência;
-    //int *pred;                                // Vértice predecessor, caso necessário (requer modificações nas funções);
+    int *pred;                                  // Vértice predecessor, caso necessário (requer modificações nas funções);
     int V;                                      // Número de Vértices;
     int E;                                      // Número de Arestas;
     int *mark;                                  // Marcador auxiliar;
