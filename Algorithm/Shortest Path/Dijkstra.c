@@ -1,3 +1,4 @@
+// Aparentemente essa implementação está lenta demais, acredito que a melhor forma de trabalhar com esse Algoritmo seja com a biblioteca de C++;
 #include <stdio.h>
 #include <stdlib.h>
 #include "../Graph/Graph List.c"// Estrutura para representar um grafo ponderado (usaremos uma lista de adjacência);
