@@ -1,4 +1,8 @@
 //Implementação de Prim, não há tentativa em C;
+// O algoritmo de Prim é um algoritmo guloso que resolve o problema da árvore geradora mínima para um grafo conexo, não dirigido e ponderado;
+// O algoritmo mantém uma lista de vértices para os quais a árvore geradora mínima já é conhecida;
+// O algoritmo continua a estender essa lista um vértice de cada vez até que ela contenha todos os vértices do grafo;
+
 #include <iostream>
 #include <vector>
 #include <queue>

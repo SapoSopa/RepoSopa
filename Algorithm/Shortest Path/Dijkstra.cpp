@@ -1,4 +1,9 @@
 //Implementação de Dijkstra em C++, tente usar mais essa, pois provavelmente será mais concisa, rápida e correta;
+// Um algoritmo para encontrar o menor caminho em um grafo ponderado entre um vértice inicial e todos os outros vértices;
+// O algoritmo de Dijkstra é um algoritmo guloso que resolve o problema do caminho mais curto para um grafo dirigido ou não dirigido com arestas NÃO NEGATIVAS;
+// O algoritmo mantém uma lista de vértices para os quais o menor caminho já é conhecido;
+// O algoritmo continua a estender essa lista um vértice de cada vez até que ele contenha todos os vértices do grafo;
+
 #include <iostream>
 #include <vector>           //Serve para usar o vetor que será usado para armazenar as distâncias;
 #include <queue>            //Serve para usar a fila de prioridade que será usada para a implementação do algoritmo;
