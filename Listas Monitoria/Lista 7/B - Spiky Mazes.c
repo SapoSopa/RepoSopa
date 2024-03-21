@@ -1,97 +1,91 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdbool.h>
+
+bool possible = false;
+bool path[42][42];
+char maze[42][42];
+int n, m, j;
 
 int dx[4] = {-1, 0, 1, 0};
 int dy[4] = {0, 1, 0, -1};
-int possible = 0;
 
-int valid(int i, int j, int n, int m);
-void dfs(int x, int y, char** maze, char** path, int n, int m, int j, int J);
-
-int main()
+bool isValid(int x, int y)
 {
-    int n, m, j;
-    scanf("%d %d %d", &n, &m, &j);
-    char** maze = (char**)malloc(n * sizeof(char*));
-    char** path = (char**)malloc(n * sizeof(char*));
-    for (int i = 0; i < n; i++)
-    {
-        maze[i] = (char*)malloc(m * sizeof(char));
-        path[i] = (char*)malloc(m * sizeof(char));
-        for (int j = 0; j < m; j++)
-        {
-            scanf("%c", &maze[i][j]);
-            path[i][j] = 0;
-        }
-    }
-    for (int i = 0; i < j; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            if (maze[i][j] == '@')
-            {
-                dfs(i, j, maze, path, n, m, j, j);
-            }
-        }
-    }
-
-    if (possible)
-    {
-        printf("SUCCESS\n");
-    }
-    else
-    {
-        printf("IMPOSSIBLE\n");
-    }
-
-    return 0;
+	return (x >= 0 && x < n && y >= 0 && y < m);
 }
 
-int valid(int i, int j, int n, int m)
-{
-    if (i >= 0 && i < n && j >= 0 && j < m)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void dfs(int x, int y, char** maze, char** path, int n, int m, int j, int J)
+void dfs(int x, int y, int rem)
 {
     path[x][y] = 1;
-    for (int i = 0; i < 4; i++)
+    for(int i = 0;i < 4; i++)
     {
-        int newx = x + dx[i];
-        int newy = y + dy[i];
-        if (valid(newx, newy, n, m) && !path[newx][newy])
+        int tempX = x+dx[i];
+        int tempY = y+dy[i];
+        if(isValid(tempX, tempY) && !path[tempX][tempY])
         {
-            if (maze[newx][newy] == '.')
+            if(maze[tempX][tempY] == '.')
             {
-                dfs(newx, newy, maze, path, n, m, j, J);
-                path[newx][newy] = 0;
+                dfs(tempX, tempY, rem);
+                path[tempX][tempY] = 0;
             }
-            if (maze[newx][newy] == '@')
+            if(maze[tempX][tempY] == '@')
             {
-                dfs(newx, newy, maze, path, n, m, j, J);
-                path[newx][newy] = 0;
+                dfs(tempX, tempY, rem);
+                path[tempX][tempY] = 0;
             }
-            if (maze[newx][newy] == 's')
+            if(maze[tempX][tempY] == 's')
             {
-                dfs(newx, newy, maze, path, n, m, j, J - 1);
-                path[newx][newy] = 0;
+                dfs(tempX, tempY, rem-1);
+                path[tempX][tempY] = 0;	
             }
-            if (maze[newx][newy] == 'x')
+            if(maze[tempX][tempY] == 'x')
             {
-                int custo = j - J;
-                if (J >= custo)
+                int consumed = j - rem;
+                if(rem >= consumed)
                 {
-                    possible = 1;
+                    possible = true;
                 }
                 return;
             }
         }
     }
+}
+
+int main()
+{
+    scanf("%d %d %d", &n, &m, &j);
+    for(int x = 0; x < n; x++)
+    {
+        for(int y = 0; y < m; y++)
+        {
+            scanf(" %c", &maze[x][y]);
+        }
+    }
+    for(int x = 0; x < n; x++)
+    {
+        for(int y = 0; y < n; y++)
+        {
+            if(maze[x][y] == '@')
+            {
+                for(int k = 0; k < n; k++)
+                {
+                    for(int l = 0; l < m; l++)
+                    {
+                        path[k][l] = false;
+                    }
+                }
+                dfs(x, y, j);
+            }
+        }
+    }
+    if(possible)
+    {
+    	printf("SUCCESS\n");
+    }
+    else
+    {
+    	printf("IMPOSSIBLE\n");
+    }
+
+    return 0;
 }
