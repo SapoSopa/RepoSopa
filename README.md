@@ -1,4 +1,2 @@
 # RepoSopa
-SapoSopa's Algorithms
-Examples of algorithms to study and practice
-All algorithms was tried to be done in C before be done in C++
+Repositório atualmente usado na universidade; eventualmente será devidamente arrumado como os demais.
